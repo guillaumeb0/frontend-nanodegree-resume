@@ -8,7 +8,7 @@
  * ---------------------------------------------------------------------------------------------------------------------
  */
 var bio = {
-    'name': 'John DOE',
+    'name': 'John Doe',
     'role': 'Front-end Apprentice',
     'contacts': {
         'mobile': '650-555-5555',
@@ -20,7 +20,7 @@ var bio = {
     'picture_url': '??',
     'welcomeMessage': 'Hi, I\'m G. Glad to see you here !',
     'skills': ['awsomeness', 'delivering things', 'cryogenic sleep', 'saving the universe'],
-    'bioPic': 'images/4951697-maxresdefault.jpg'
+    'biopic': 'images/4951697-maxresdefault.jpg'
 };
 
 var education = {
@@ -28,27 +28,30 @@ var education = {
         'name': 'CNAM',
         'location': 'paris',
         'degree': '2 years post high school graduate',
-        'major': ['ComputerSci'],
-        'graduationYear': 2013
+        'majors': ['ComputerSci'],
+        'dates': '2012 - 2014',
+        'url': 'http://www.cnam.fr/'
     }, {
         'name': 'CNAM',
         'location': 'cergy',
         'degree': 'Bsc',
-        'major': ['ComputerSci'],
-        'graduationYear': 2014
+        'majors': ['ComputerSci'],
+        'dates': '2014 - 2015',
+        'url': 'http://www.cnam.fr/'
     }, {
         'name': 'ITESCIA',
         'location': 'cergy',
         'degree': 'master',
-        'major': ['ComputerSci'],
-        'graduationYear': 2015
+        'majors': ['ComputerSci'],
+        'dates': '2015 - 2016',
+        'url': 'http://www.itescia.fr/'
     }
     ],
     'onlineCourses': [
         {
             'title': 'Javascript Crash Course',
             'school': 'Udacity',
-            'dates': 2016,
+            'date': 2016,
             'url': 'http://www.udacity.com/course/ud804'
         }
     ]
@@ -129,10 +132,10 @@ work.display = function () {
         var formattedDescription = HTMLworkDescription.replace('%data%', job['description']);
 
         $('#workExperience').append(formattedWorkStart);
-        $('.work-entry:last').append(formattedWorkEmployer + formattedWorkTitle);
-        $('.work-entry:last').append(formattedDates);
-        $('.work-entry:last').append(formattedWorkLocation);
-        $('.work-entry:last').append(formattedDescription);
+        $('.work-entry:last').append(formattedWorkEmployer + formattedWorkTitle)
+            .append(formattedDates)
+            .append(formattedWorkLocation)
+            .append(formattedDescription);
     });
 };
 
@@ -145,15 +148,38 @@ education.display = function () {
         var formattedSchoolStart = HTMLschoolStart;
         var formattedSchoolName = HTMLschoolName.replace('%data%', school.name);
         var formattedSchoolDegree = HTMLschoolDegree.replace('%data%', school.degree);
-        var formattedSchoolDates = HTMLschoolDates.replace('%data%', school.graduationYear);
+        var formattedSchoolDates = HTMLschoolDates.replace('%data%', school.dates);
         var formattedSchoolLocation = HTMLschoolLocation.replace('%data%', school.location);
 
         $('#education').append(formattedSchoolStart);
-        $('.education-entry:last').append(formattedSchoolName);
-        $('.education-entry:last').append(formattedSchoolDegree);
-        $('.education-entry:last').append(formattedSchoolDates);
-        $('.education-entry:last').append(formattedSchoolLocation);
+        $('.education-entry:last').append(formattedSchoolName)
+        .append(formattedSchoolDegree)
+        .append(formattedSchoolDates)
+        .append(formattedSchoolLocation);
+
+        school.majors.forEach(function(major) {
+            var formattedSchoolMajor = HTMLschoolMajor.replace('%data%', major);
+            $('.education-entry:last').append(formattedSchoolMajor);
+        });
     });
+
+    if (!education.onlineCourses.length) return;     // if no online courses, we don't try to print it
+    console.log('test');
+    $('#education').append(HTMLonlineClasses);
+
+    education.onlineCourses.forEach(function(onlineCourse) {
+        var formattedSchoolStart = HTMLschoolStart;
+        var formattedTitle = HTMLonlineTitle.replace('%data%', onlineCourse.title);
+        var formattedSchool = HTMLonlineSchool.replace('%data%', onlineCourse.school);
+        var formattedDates = HTMLonlineDates.replace('%data%', onlineCourse.date.toString());
+        var formattedUrl = HTMLonlineURL.replace('%data%', onlineCourse.url);
+
+        $('#education').append(formattedSchoolStart);
+        $('.education-entry:last').append(formattedTitle + formattedSchool)
+            .append(formattedDates)
+            .append(formattedUrl);
+    });
+
 };
 
 /**
@@ -174,14 +200,20 @@ bio.display = function() {
 
     $('#header').prepend(formattedRole);
     $('#header').prepend(formattedName);
-    $('#topContacts').append(formattedMobile);
-    $('#topContacts').append(formattedEmail);
-    $('#topContacts').append(formattedTwitter);
-    $('#topContacts').append(formattedGithub);
-    $('#topContacts').append(formattedLocation);
+    $('#topContacts').append(formattedMobile)
+    .append(formattedEmail)
+    .append(formattedTwitter)
+    .append(formattedGithub)
+    .append(formattedLocation);
+
+    $('#footerContacts').append(formattedMobile)
+        .append(formattedEmail)
+        .append(formattedTwitter)
+        .append(formattedGithub)
+        .append(formattedLocation);
 
     // Header adding information to the DOM
-    var formattedPic = HTMLbioPic.replace('%data%', bio.bioPic);
+    var formattedPic = HTMLbioPic.replace('%data%', bio.biopic);
     $('#header').append(formattedPic);
 
 
@@ -206,9 +238,9 @@ projects.display = function() {
         var formattedProjectDescription = HTMLprojectDescription.replace('%data%', project.description);
 
         $('#projects').append(formattedProjectStart);
-        $('.project-entry:last').append(formattedProjectTitle);
-        $('.project-entry:last').append(formattedProjectDates);
-        $('.project-entry:last').append(formattedProjectDescription);
+        $('.project-entry:last').append(formattedProjectTitle)
+        .append(formattedProjectDates)
+        .append(formattedProjectDescription);
 
         project.images.forEach(function(image) {
             var formattedProjectImage = HTMLprojectImage.replace('%data%', image);
@@ -238,8 +270,6 @@ function inName(name) {
     return firstName[0].toUpperCase() + firstName.slice(1).toLowerCase() + ' ' +
         lastName[0].toUpperCase() + lastName.slice(1).toLowerCase();
 }
-
-$('#main').append(internationalizeButton);
 
 // Adding the map
 $('#mapDiv').append(googleMap);
